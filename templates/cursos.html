@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Lista de Cursos</h2>
-    <p>Próximamente listado de cursos.</p>
+    <h2>Lista de Cursos Disponibles</h2>
+    <ul>
+    {% for curso in cursos %}
+        <li style="margin-bottom: 10px;">
+            <strong>{{ curso.nombre }}</strong> — Docente: {{ curso.docente }} (Cupos: {{ curso.cupos }})
+            {% if curso.cupos > 0 %}
+                <span style="color: green; font-weight: bold;">[Curso disponible]</span>
+            {% elif curso.cupos == 0 %}
+                <span style="color: red; font-weight: bold;">[Curso lleno]</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
 {% endblock %}

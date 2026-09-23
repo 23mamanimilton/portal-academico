@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_academica_2026"
@@ -9,9 +9,16 @@ usuarios = {
     "pedro": "2026"
 }
 
+cursos_lista = [
+    {"nombre": "Programación Web", "docente": "Luis Pérez", "cupos": 15},
+    {"nombre": "Bases de Datos", "docente": "Ana López", "cupos": 8},
+    {"nombre": "Inteligencia Artificial", "docente": "Carlos Rojas", "cupos": 0}
+]
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    usuario_cookie = request.cookies.get('usuario_preferido')
+    return render_template('index.html', usuario_cookie=usuario_cookie)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -22,7 +29,11 @@ def login():
         if usuario in usuarios and usuarios[usuario] == password:
             session['usuario'] = usuario
             flash(f"¡Bienvenido, {usuario}!", "success")
-            return redirect(url_for('cursos'))
+            
+            # Guardar cookie usuario_preferido y redirigir a /cursos
+            response = make_response(redirect(url_for('cursos')))
+            response.set_cookie('usuario_preferido', usuario, max_age=60*60*24*7)
+            return response
         else:
             flash("Usuario o contraseña incorrectos.", "error")
             return redirect(url_for('login'))
@@ -31,7 +42,7 @@ def login():
 
 @app.route('/cursos')
 def cursos():
-    return render_template('cursos.html')
+    return render_template('cursos.html', cursos=cursos_lista)
 
 @app.route('/perfil')
 def perfil():
@@ -45,6 +56,13 @@ def logout():
     session.pop('usuario', None)
     flash("La sesión fue cerrada correctamente.", "info")
     return redirect(url_for('index'))
+
+@app.route('/eliminar_cookie')
+def eliminar_cookie():
+    response = make_response(redirect(url_for('index')))
+    response.delete_cookie('usuario_preferido')
+    flash("Cookie eliminada correctamente.", "info")
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>Portal Académico</h1>
-    <p>Bienvenido al Portal Académico.</p>
+
+    {% if usuario_cookie %}
+        <p><strong>Bienvenido nuevamente, {{ usuario_cookie }}.</strong></p>
+        <p><a href="{{ url_for('eliminar_cookie') }}" style="color: #c82333;">[Olvidar usuario / Eliminar cookie]</a></p>
+    {% else %}
+        <p>Bienvenido al Portal Académico.</p>
+    {% endif %}
 {% endblock %}

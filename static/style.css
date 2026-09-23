@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f8f9fa;
+    color: #333;
+}
+nav {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ccc;
+}
+nav a {
+    margin-right: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #0056b3;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+.flash {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.flash.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
